@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>sass中的Mixin和placeholder | ShumRain 的博客</title>
+    <meta name="description" content="最近的项目中在用 sass 写组件，需要用到其中的 Mixin 和 placeholder">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.89303249.css" as="style"><link rel="preload" href="/assets/js/app.cbe47b68.js" as="script"><link rel="preload" href="/assets/js/7.c39c5524.js" as="script"><link rel="prefetch" href="/assets/js/2.8283421a.js"><link rel="prefetch" href="/assets/js/3.032bdd2b.js"><link rel="prefetch" href="/assets/js/4.5833a92b.js"><link rel="prefetch" href="/assets/js/5.773626c7.js"><link rel="prefetch" href="/assets/js/6.69e9734e.js"><link rel="prefetch" href="/assets/js/8.8df0a8d8.js"><link rel="prefetch" href="/assets/js/9.a2aea0b8.js"><link rel="prefetch" href="/assets/js/10.cffd2df3.js"><link rel="prefetch" href="/assets/js/11.ef3cf604.js"><link rel="prefetch" href="/assets/js/12.099d304b.js"><link rel="prefetch" href="/assets/js/13.61c84d14.js"><link rel="prefetch" href="/assets/js/14.ecda0291.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.89303249.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="wrap"><h1><a href="javascript:;">SHUMRAIN <span>/</span></a></h1> <nav class="nav-links"><div class="nav-item"><a href="/archives" class="nav-link">ARCHIVES</a></div><div class="nav-item"><a href="/about" class="nav-link">ABOUT</a></div><div class="nav-item"><a href="/friends" class="nav-link">FRIENDS</a></div> <div class="nav-links"><a href="https://github.com/ShumRain" target="_blank"><svg aria-hidden="true" height="24" version="1.1" viewBox="0 0 16 16" width="24" class="github"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a></div></nav> <div class="dropdown"><a href="javascript:;" class="dropdown-toggle"><span class="icon"></span></a> <!----></div></div></header> <main><article class="article-content"><div class="banner-inner-box"><div data-lazy="https://cdn.shumrain.me/image/blog/Sunset.png?imageView2/0/format/jpg/q/100" class="article-banner lazy-bg"><div class="cover"></div></div> <div class="wrap"><h1 class="article-title">sass中的Mixin和placeholder</h1> <div class="article-info"><p class="artivle-date">21 Aug 2017</p> <ul><li><a href="javascript:;">css sass</a></li></ul></div></div></div> <div class="article-wrap"><div class="content markdown-body"><p>最近的项目中在用<code>sass</code>写组件，需要用到其中的<code>Mixin</code>和<code>placeholder</code>。</p> <h2 id="混合器mixin">混合器Mixin <a href="#混合器mixin" aria-hidden="true" class="header-anchor"></a></h2> <p>一般情况下都是用<code>@mixin</code>来定义一些公共的 css 属性，可以传入参数，在写其他的 css 时可用<code>@include</code>来引入这些公共的 css 属性。可以用更少的代码来完成更多的样式。</p> <div class="language-scss extra-class"><pre class="language-scss"><code><span class="token keyword">@mixin</span> <span class="token function">button-size</span><span class="token punctuation">(</span><span class="token variable">$width</span>,<span class="token variable">$height</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token property">width</span><span class="token punctuation">:</span> <span class="token variable">$width</span><span class="token punctuation">;</span>
+	<span class="token property">height</span><span class="token punctuation">:</span> <span class="token variable">$height</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>定义了一个名叫<code>button-size</code>的混合器，然后就可用<code>@include</code>引入到其他的css中。</p> <div class="language-scss extra-class"><pre class="language-scss"><code><span class="token selector">.btn-s </span><span class="token punctuation">{</span>
+    <span class="token keyword">@include</span> <span class="token function">button-size</span><span class="token punctuation">(</span>80px,25px<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-l </span><span class="token punctuation">{</span>
+    <span class="token keyword">@include</span> <span class="token function">button-size</span><span class="token punctuation">(</span>200px,40px<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 编译后 =&gt;</span>
+
+<span class="token selector">.btn-s </span><span class="token punctuation">{</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> 80px<span class="token punctuation">;</span>
+  	<span class="token property">height</span><span class="token punctuation">:</span> 25px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-l </span><span class="token punctuation">{</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> 200px<span class="token punctuation">;</span>
+  	<span class="token property">height</span><span class="token punctuation">:</span> 40px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这时候就生成了两个不同大小的按钮，如果你还想加上其他样式，但是这些样式都一样，这时候又再定义一个<code>mixin</code>，并引入。</p> <div class="language-scss extra-class"><pre class="language-scss"><code><span class="token keyword">@mixin</span> <span class="token selector">button-base </span><span class="token punctuation">{</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> #fff<span class="token punctuation">;</span>
+    <span class="token property">background</span><span class="token punctuation">:</span> #4BACE4<span class="token punctuation">;</span>
+    <span class="token property">border</span><span class="token punctuation">:</span> 1px solid #4BACE4<span class="token punctuation">;</span>
+    <span class="token property">border-radius</span><span class="token punctuation">:</span> 5px<span class="token punctuation">;</span>
+    <span class="token property">outline</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+    <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-s </span><span class="token punctuation">{</span>
+    <span class="token keyword">@include</span> button-base<span class="token punctuation">;</span>
+    <span class="token keyword">@include</span> <span class="token function">button-size</span><span class="token punctuation">(</span>80px,25px<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-l </span><span class="token punctuation">{</span>
+    <span class="token keyword">@include</span> button-base<span class="token punctuation">;</span>
+    <span class="token keyword">@include</span> <span class="token function">button-size</span><span class="token punctuation">(</span>200px,40px<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token comment">// 编译后 =&gt;</span>
+
+<span class="token selector">.btn-s </span><span class="token punctuation">{</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> #fff<span class="token punctuation">;</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border</span><span class="token punctuation">:</span> 1px solid #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border-radius</span><span class="token punctuation">:</span> 5px<span class="token punctuation">;</span>
+  <span class="token property">outline</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+  <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> 40px<span class="token punctuation">;</span>
+  <span class="token property">height</span><span class="token punctuation">:</span> 25px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-l </span><span class="token punctuation">{</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> #fff<span class="token punctuation">;</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border</span><span class="token punctuation">:</span> 1px solid #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border-radius</span><span class="token punctuation">:</span> 5px<span class="token punctuation">;</span>
+  <span class="token property">outline</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+  <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> 80px<span class="token punctuation">;</span>
+  <span class="token property">height</span><span class="token punctuation">:</span> 45px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这时会发现第二次引入的<code>button-base</code>其实都是一样的，但是还是分开插入了，这样代码就太多了，其实我们想要的是这样：</p> <div class="language-scss extra-class"><pre class="language-scss"><code><span class="token selector">.btn-s,.btn-l </span><span class="token punctuation">{</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> #fff<span class="token punctuation">;</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border</span><span class="token punctuation">:</span> 1px solid #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border-radius</span><span class="token punctuation">:</span> 5px<span class="token punctuation">;</span>
+  <span class="token property">outline</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+  <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这时就要用到<code>placeholder</code>了</p> <h2 id="placeholder">placeholder <a href="#placeholder" aria-hidden="true" class="header-anchor"></a></h2> <p>placeholder 的主要用途也是定义公共的代码，用更少的代码干更多的事。定义时用<code>%</code>后跟上定义的名字，用<code>@extend</code>来引入，和定义一个 css 样式有点像，但是用<code>%placeholder</code>不会产生多余的代码。</p> <div class="language-scss extra-class"><pre class="language-scss"><code><span class="token keyword">@mixin</span> <span class="token function">button-size</span><span class="token punctuation">(</span><span class="token variable">$width</span>,<span class="token variable">$height</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> <span class="token variable">$width</span><span class="token punctuation">;</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> <span class="token variable">$height</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token placeholder">%button-base</span> </span><span class="token punctuation">{</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> #fff<span class="token punctuation">;</span>
+    <span class="token property">background</span><span class="token punctuation">:</span> #4BACE4<span class="token punctuation">;</span>
+    <span class="token property">border</span><span class="token punctuation">:</span> 1px solid #4BACE4<span class="token punctuation">;</span>
+    <span class="token property">border-radius</span><span class="token punctuation">:</span> 5px<span class="token punctuation">;</span>
+    <span class="token property">outline</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+    <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-s </span><span class="token punctuation">{</span>
+    <span class="token keyword">@extend</span> <span class="token placeholder selector">%button-base</span><span class="token punctuation">;</span>
+    <span class="token keyword">@include</span> <span class="token function">button-size</span><span class="token punctuation">(</span>40px,25px<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector">.btn-l </span><span class="token punctuation">{</span>
+    <span class="token keyword">@extend</span> <span class="token placeholder selector">%button-base</span><span class="token punctuation">;</span>
+    <span class="token keyword">@include</span> <span class="token function">button-size</span><span class="token punctuation">(</span>80px,45px<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>编译后：</p> <div class="language-scss extra-class"><pre class="language-scss"><code><span class="token selector">.btn-s, .btn-l </span><span class="token punctuation">{</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> #fff<span class="token punctuation">;</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border</span><span class="token punctuation">:</span> 1px solid #4BACE4<span class="token punctuation">;</span>
+  <span class="token property">border-radius</span><span class="token punctuation">:</span> 5px<span class="token punctuation">;</span>
+  <span class="token property">outline</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+  <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-s </span><span class="token punctuation">{</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> 40px<span class="token punctuation">;</span>
+  <span class="token property">height</span><span class="token punctuation">:</span> 25px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">.btn-l </span><span class="token punctuation">{</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> 80px<span class="token punctuation">;</span>
+  <span class="token property">height</span><span class="token punctuation">:</span> 45px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>这样就很完美了。</p> <h2 id="使用哪个？">使用哪个？ <a href="#使用哪个？" aria-hidden="true" class="header-anchor"></a></h2> <p>在<code>%placeholder</code>中不能使用变量，如果你需要变量的话，最好使用<code>@mixin</code>。</p> <p>举个例子：你的项目中有很多尺寸的按钮，这些按钮遍布很多页面。在你写完之后，你的产品经理可能觉得这个按钮长度有点长了，如果你用的<code>@mixin</code>只需要改一个变量就可以了。</p> <p>如果有些基本的样式，就可以愉快的使用<code>%placeholder</code>,比如：</p> <div class="language-scss extra-class"><pre class="language-scss"><code><span class="token selector"><span class="token placeholder">%center-block</span> </span><span class="token punctuation">{</span>
+  <span class="token property">margin-left</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+  <span class="token property">margin-right</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><div class="language-scss extra-class"><pre class="language-scss"><code><span class="token selector"><span class="token placeholder">%over-show-ellipsis</span> </span><span class="token punctuation">{</span>
+  <span class="token property">overflow</span><span class="token punctuation">:</span> hidden<span class="token punctuation">;</span>
+  <span class="token property">text-overflow</span><span class="token punctuation">:</span> ellipsis<span class="token punctuation">;</span>
+  <span class="token property">white-space</span><span class="token punctuation">:</span> nowrap<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="参考阅读">参考阅读 <a href="#参考阅读" aria-hidden="true" class="header-anchor"></a></h2> <ul><li><a href="https://www.w3cplus.com/preprocessor/sass-mixin-placeholder.html" target="_blank" rel="noopener noreferrer">Sass:Mixin还是Placeholder<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="http://thesassway.com/intermediate/understanding-placeholder-selectors" target="_blank" rel="noopener noreferrer">Understanding placeholder selectors<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <!----></div></article> <nav class="page-nav" data-v-570a0ba2><div class="page-nav-item" data-v-570a0ba2><div data-lazy="https://cdn.shumrain.me/image/blog/b3d9be-background.png?imageView2/0/format/jpg/q/100" class="cover lazy-bg blur" data-v-570a0ba2></div> <a href="/blog/page-Visibility.html" data-v-570a0ba2><h2 class="title" data-v-570a0ba2>Page Visibility API</h2> <p data-v-570a0ba2>当一个网页是可见或点击选中的状态时 Page Visibility API 可以...</p></a></div> <div class="page-nav-item" data-v-570a0ba2><div data-lazy="https://cdn.shumrain.me/image/blog/Hydrogen_Remixed.png?imageView2/0/format/jpg/q/100" class="cover lazy-bg blur" data-v-570a0ba2></div> <a href="/blog/%E4%B8%AA%E4%BA%BA%E7%9A%84git%E9%85%8D%E7%BD%AE.html" data-v-570a0ba2><h2 class="title" data-v-570a0ba2>个人的git配置</h2> <p data-v-570a0ba2>由于经常使用 git，我习惯把其中经常用的简化，也就是配置别名...</p></a></div></nav> <div id="comments-container"></div></main> <!----> <footer><div class="wrap"><p>© 2018  <a href="/">ShumRain</a>. Powered by <a href="https://vuepress.vuejs.org/" target="_blank">Vuepress</a> and <a href="https://github.com/ShumRain/vuepress-theme-Feb" class="underline-a">Feb</a></p> <p>蜀ICP备16035027号-2</p></div></footer></div></div>
+    <script src="/assets/js/7.c39c5524.js" defer></script><script src="/assets/js/app.cbe47b68.js" defer></script>
+  </body>
+</html>

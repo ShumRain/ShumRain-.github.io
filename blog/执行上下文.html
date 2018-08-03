@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Execution Contexts | ShumRain 的博客</title>
+    <meta name="description" content="在上篇文章《作用域》提到了执行上下文(Execution Contexts)">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.89303249.css" as="style"><link rel="preload" href="/assets/js/app.cbe47b68.js" as="script"><link rel="preload" href="/assets/js/11.ef3cf604.js" as="script"><link rel="prefetch" href="/assets/js/7.c39c5524.js"><link rel="prefetch" href="/assets/js/2.8283421a.js"><link rel="prefetch" href="/assets/js/3.032bdd2b.js"><link rel="prefetch" href="/assets/js/4.5833a92b.js"><link rel="prefetch" href="/assets/js/5.773626c7.js"><link rel="prefetch" href="/assets/js/6.69e9734e.js"><link rel="prefetch" href="/assets/js/8.8df0a8d8.js"><link rel="prefetch" href="/assets/js/9.a2aea0b8.js"><link rel="prefetch" href="/assets/js/10.cffd2df3.js"><link rel="prefetch" href="/assets/js/12.099d304b.js"><link rel="prefetch" href="/assets/js/13.61c84d14.js"><link rel="prefetch" href="/assets/js/14.ecda0291.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.89303249.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="wrap"><h1><a href="javascript:;">SHUMRAIN <span>/</span></a></h1> <nav class="nav-links"><div class="nav-item"><a href="/archives" class="nav-link">ARCHIVES</a></div><div class="nav-item"><a href="/about" class="nav-link">ABOUT</a></div><div class="nav-item"><a href="/friends" class="nav-link">FRIENDS</a></div> <div class="nav-links"><a href="https://github.com/ShumRain" target="_blank"><svg aria-hidden="true" height="24" version="1.1" viewBox="0 0 16 16" width="24" class="github"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg></a></div></nav> <div class="dropdown"><a href="javascript:;" class="dropdown-toggle"><span class="icon"></span></a> <!----></div></div></header> <main><article class="article-content"><div class="banner-inner-box"><div data-lazy="https://cdn.shumrain.me/image/blog/Christmas_Trees.png?imageView2/0/format/jpg/q/100" class="article-banner lazy-bg"><div class="cover"></div></div> <div class="wrap"><h1 class="article-title">Execution Contexts</h1> <div class="article-info"><p class="artivle-date">4 Jan 2018</p> <ul><li><a href="javascript:;">javascript</a></li></ul></div></div></div> <div class="article-wrap"><div class="content markdown-body"><p>在上篇文章《作用域》提到了执行上下文(Execution Contexts)，以及变量对象(variable object)和作用域链(scope chain)。</p> <blockquote><p>js 代码整个执行过程分为代码编译阶段和代码执行阶段。在编译阶段确定作用域，执行阶创建<strong>执行上下文</strong>。</p></blockquote> <blockquote><p>当查找变量时，会先从当前<strong>执行上下文</strong>的<strong>变量对象</strong>中查找。如果没有找到，就会从父级执行上下文的变量对象中查找，以及父级的父级直到全局执行上下文的变量对象，也就是全局对象。这样由多个执行上下文的<strong>变量对象</strong>构成的链表就是作用域链。</p></blockquote> <p>个人认为context翻译成上下文有点不好理解，环境还会更容易理解，此文的用简写<code>EC</code>表示。</p> <h2 id="定义">定义 <a href="#定义" aria-hidden="true" class="header-anchor"></a></h2> <blockquote><p>When control is transferred to ECMAScript executable code, control is entering an <em>execution context</em>. Active execution contexts logically form a stack. The top execution context on this logical stack is the running execution context.</p></blockquote> <p>js 编译阶段时会把代码编译成一段一段的可执行代码。当控制器遇到<strong>可执行代码</strong>就会创建<code>EC</code>，由 js 引擎实现。在程序运行时，可能会产生多个 EC，这些 EC 会被保存在栈中，栈底永远是全局 EC ，而栈顶是当前的 EC，执行完毕后出栈。</p> <p>将一个数组模拟成 EC 栈：</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+</code></pre></div><h2 id="可执行代码">可执行代码 <a href="#可执行代码" aria-hidden="true" class="header-anchor"></a></h2> <p>可执行代码有三种，分别是全局代码、函数代码、eval代码（这里不做讨论）。</p> <h3 id="全局代码">全局代码 <a href="#全局代码" aria-hidden="true" class="header-anchor"></a></h3> <p>全局代码是不被包含在函数内的代码。当执行全局代码时，会创建全局 EC 。</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span>
+  GlobalContext
+<span class="token punctuation">]</span>
+</code></pre></div><p>进栈后，其中的全局代码才会开始执行。</p> <h3 id="函数代码">函数代码 <a href="#函数代码" aria-hidden="true" class="header-anchor"></a></h3> <p>在全局代码被执行时，如果遇到函数，则会再创建一个 EC , 被 push 到 ECStack。</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span>
+  FunctionContext
+  GlobalContext
+<span class="token punctuation">]</span>
+</code></pre></div><p><code>FunctionContext</code>被创建后，开始执行其中的函数代码。如果其中还有函数，又会再创建 EC，以此类推，多个 EC 会形成一个执行栈。</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token function">FunctionContext</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+  <span class="token function">FunctionContext</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+  <span class="token function">FunctionContext</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+  <span class="token function">FunctionContext</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+  GlobalContext
+<span class="token punctuation">]</span>
+</code></pre></div><p>每一段函数代码执行完毕，该 EC 就会退出 ECStack，最终只剩下全局 EC，全局 EC在程序结束时（浏览器关闭）也会退出栈。</p> <h2 id="举个例子">举个例子 <a href="#举个例子" aria-hidden="true" class="header-anchor"></a></h2> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token number">2</span>
+
+<span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> c <span class="token operator">=</span> <span class="token number">3</span>
+
+	fucntion <span class="token function">bar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">var</span> d <span class="token operator">=</span> <span class="token number">4</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token function">bar</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><p>a，b，foo()，都是全局代码，当遇到这一段代码时，创建全局 EC ，全局 EC 进栈。</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span>
+  globaclContext 
+<span class="token punctuation">]</span>
+</code></pre></div><p>执行全局 EC 中的代码，当执行到 foo() 时，函数 foo 创建新的 EC</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span>
+  foo FunctionContext
+  globaclContext 
+<span class="token punctuation">]</span>
+</code></pre></div><p>然后开始执行 foo 中的函数代码，当遇到 bar() 后，又会新建一个 EC</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token operator">&lt;</span>bar<span class="token operator">&gt;</span> FunctionContext
+  <span class="token operator">&lt;</span>foo<span class="token operator">&gt;</span> FunctionContext
+  globaclContext 
+<span class="token punctuation">]</span>
+</code></pre></div><p>这时执行 bar 中的代码，当 bar 中的代码执行完毕时，<code>&lt;bar&gt; FunctionContext</code>出栈</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code>ECStack <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token operator">&lt;</span>foo<span class="token operator">&gt;</span> FunctionContext
+  globaclContext 
+<span class="token punctuation">]</span>
+</code></pre></div><p>以此类推，程序关闭时，全局 EC 出栈。</p> <h2 id="后记">后记 <a href="#后记" aria-hidden="true" class="header-anchor"></a></h2> <p>每个执行上下文都有三个重要属性：</p> <ul><li>变量对象(variable object)</li> <li>作用域链(Scope chain)</li> <li>this</li></ul> <p>将会在之后的文章中详细描写。而其中的变量对象是 ES3 的说法，在 ES5 中换了个说法。</p> <h2 id="总结">总结 <a href="#总结" aria-hidden="true" class="header-anchor"></a></h2> <p>需要注意的时，执行上下文和作用域看似相似，但是还是有明显区别。</p> <p>作用域在词法解析阶段就已经确定了，而执行上下文是在执行时才创建的。</p> <p>作用域主要是区分变量的作用范围，而执行上下文主要是规范可执行代码的执行顺序。</p> <h2 id="参考阅读">参考阅读 <a href="#参考阅读" aria-hidden="true" class="header-anchor"></a></h2> <ul><li><p><a href="http://dmitrysoshnikov.com/ecmascript/chapter-1-execution-contexts/" target="_blank" rel="noopener noreferrer">Execution Contexts<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></li> <li><p><a href="https://github.com/mqyqingfeng/Blog/issues/4" target="_blank" rel="noopener noreferrer">JavaScript深入之执行上下文栈<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></li></ul></div> <!----></div></article> <nav class="page-nav" data-v-570a0ba2><div class="page-nav-item" data-v-570a0ba2><div data-lazy="https://cdn.shumrain.me/image/blog/Overlap.png?imageView2/0/format/jpg/q/100" class="cover lazy-bg blur" data-v-570a0ba2></div> <a href="/blog/%E5%8F%98%E9%87%8F%E5%AF%B9%E8%B1%A1.html" data-v-570a0ba2><h2 class="title" data-v-570a0ba2>变量对象</h2> <p data-v-570a0ba2>深入理解什么是变量对象...</p></a></div> <div class="page-nav-item" data-v-570a0ba2><div data-lazy="https://cdn.shumrain.me/image/blog/Wind-Vector-resize.png?imageView2/0/format/jpg/q/100" class="cover lazy-bg blur" data-v-570a0ba2></div> <a href="/blog/%E6%94%B9%E5%8F%98.html" data-v-570a0ba2><h2 class="title" data-v-570a0ba2>克制</h2> <p data-v-570a0ba2>克制食量，八分饱即可，没必要觉得吃撑才算吃饱。...</p></a></div></nav> <div id="comments-container"></div></main> <!----> <footer><div class="wrap"><p>© 2018  <a href="/">ShumRain</a>. Powered by <a href="https://vuepress.vuejs.org/" target="_blank">Vuepress</a> and <a href="https://github.com/ShumRain/vuepress-theme-Feb" class="underline-a">Feb</a></p> <p>蜀ICP备16035027号-2</p></div></footer></div></div>
+    <script src="/assets/js/11.ef3cf604.js" defer></script><script src="/assets/js/app.cbe47b68.js" defer></script>
+  </body>
+</html>
